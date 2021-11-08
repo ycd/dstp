@@ -2,42 +2,27 @@ package main
 
 import (
 	"context"
-	"github.com/spf13/cobra"
+	"flag"
 	"github.com/ycd/dstp/config"
 	"github.com/ycd/dstp/pkg/dstp"
-	"log"
+	"os"
+	"path/filepath"
 )
-
-var (
-	dstpCmd = &cobra.Command{
-		Use:   "dstp",
-		Short: "Run bunch of networking tests against your site.",
-	}
-	Addr     string
-	addrFlag string = "addr"
-)
-
-func init() {
-	dstpCmd.PersistentFlags().StringVarP(&Addr, addrFlag, "a", "", "URL, domain name or a dns server to run tests against")
-	dstpCmd.MarkPersistentFlagRequired(addrFlag)
-}
 
 func main() {
-	ctx := context.Background()
-	conf, err := executeCLI()
+	fs := flag.NewFlagSet(filepath.Base(os.Args[0]), flag.ExitOnError)
+
+	// Configure the options from the flags/config file
+	opts, err := config.ConfigureOptions(fs, os.Args[1:])
 	if err != nil {
-		log.Fatalf(err.Error())
+		config.UsageAndExit(err)
 	}
 
-	dstp.RunAllTests(ctx, conf)
-}
-
-func executeCLI() (config.Config, error) {
-	if err := dstpCmd.Execute(); err != nil {
-		return config.Config{}, err
+	if opts.ShowHelp {
+		config.HelpAndExit()
 	}
 
-	conf := config.Config{Addr: Addr}
+	ctx := context.Background()
 
-	return conf, nil
+	dstp.RunAllTests(ctx, *opts)
 }
