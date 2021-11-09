@@ -54,8 +54,12 @@ func ConfigureOptions(fs *flag.FlagSet, args []string) (*Config, error) {
 	}
 	values := fs.Args()
 
+	if opts.ShowHelp {
+		HelpAndExit()
+	}
+
 	if !opts.ShowHelp && len(values) < 1 {
-		return nil, fmt.Errorf("address is required")
+		HelpAndExit()
 	}
 
 	if len(values) > 1 {

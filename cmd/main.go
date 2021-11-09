@@ -18,10 +18,6 @@ func main() {
 		config.UsageAndExit(err)
 	}
 
-	if opts.ShowHelp {
-		config.HelpAndExit()
-	}
-
 	ctx := context.Background()
 
 	dstp.RunAllTests(ctx, *opts)

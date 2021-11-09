@@ -31,13 +31,13 @@ thought a robust tool like that come in handy!
 
 ### Packages
 
-#### Arch Linux
-
-* [ ] For Arch Linux, install the [``]() package.
-
 #### Homebrew
 
-* [ ] For Homebrew on macOS, install the [``]() formula.
+For Homebrew on macOS, install the [`ycd/tap/dstp`](https://github.com/ycd/homebrew-tap#readme) formula.
+
+```zsh
+brew install ycd/tap/dstp
+```
 
 ### Downloads
 
