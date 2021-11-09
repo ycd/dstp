@@ -3,7 +3,6 @@ package ping
 import (
 	"context"
 	"fmt"
-	"github.com/go-ping/ping"
 	"github.com/ycd/dstp/pkg/common"
 	"strings"
 )
@@ -11,7 +10,7 @@ import (
 func RunTest(ctx context.Context, addr common.Address) (common.Output, error) {
 	var output string
 
-	pinger, err := ping.NewPinger(addr.String())
+	pinger, err := createPinger(addr.String())
 	if err != nil {
 		return "", err
 	}
@@ -39,7 +38,7 @@ func joinS(args ...string) string {
 func RunDNSTest(ctx context.Context, addr common.Address) (common.Output, error) {
 	var output string
 
-	pinger, err := ping.NewPinger(addr.String())
+	pinger, err := createPinger(addr.String())
 	if err != nil {
 		return "", err
 	}
