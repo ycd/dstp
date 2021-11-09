@@ -1,0 +1,1 @@
+LATEST_TAG=$(git describe --tags --abbrev=0)
