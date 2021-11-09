@@ -77,9 +77,16 @@ for 64-bit Windows, macOS, and Linux targets. They contain the compiled executab
    ```
    # May require you to use sudo
    $ go build .
-   $ cp dstp /usr/local/dstp
+   $ cp dstp /usr/local/bin/dstp
    ```
-
+   
+   #### Mac/BSD
+   ```
+   # May require you to use sudo
+   $ make
+   $ cp dstp /usr/local/bin/dstp
+   ```
+   
 3. Verify installation
 
    ```
