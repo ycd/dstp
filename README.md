@@ -23,9 +23,8 @@ Options:
 
 ## Motivation
 
-A comment about a DNS thread
-on [lobste.rs](https://lobste.rs/s/qtsklv/how_do_you_tell_if_problem_is_caused_by_dns#c_1nqkdp) gave a great idea and
-thought a robust tool like that come in handy!
+A comment on [lobste.rs](https://lobste.rs/s/qtsklv/how_do_you_tell_if_problem_is_caused_by_dns#c_1nqkdp), in a thread
+about DNS gave a great idea and thought a robust tool like that come in handy!
 
 ## Installation
 
@@ -79,14 +78,14 @@ for 64-bit Windows, macOS, and Linux targets. They contain the compiled executab
    $ go build .
    $ cp dstp /usr/local/bin/dstp
    ```
-   
+
    #### Mac/BSD
    ```
    # May require you to use sudo
    $ make
    $ cp dstp /usr/local/bin/dstp
    ```
-   
+
 3. Verify installation
 
    ```
