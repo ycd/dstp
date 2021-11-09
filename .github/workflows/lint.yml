@@ -1,0 +1,20 @@
+name: Lint
+
+on:
+  pull_request:
+    branches: "**"
+
+jobs:
+  go-lint:
+    name: "Lint"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v2.5.2
+        with:
+          args: --no-config --deadline=30m --disable-all --enable=deadcode  --enable=gocyclo --enable=varcheck --enable=structcheck --enable=errcheck --enable=dupl --enable=ineffassign --enable=unconvert --enable=goconst --enable=gosec
+
