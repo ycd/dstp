@@ -11,6 +11,8 @@ import (
 	"net/http"
 	"reflect"
 	"strings"
+	"time"
+	"math"
 )
 
 type Result struct {
@@ -91,8 +93,10 @@ func testTLS(ctx context.Context, address common.Address) (common.Output, error)
 		return "", err
 	}
 
-	expiry := conn.ConnectionState().PeerCertificates[0].NotAfter
-	output += fmt.Sprintf("certificate is valid for %v days", expiry.Day())
+	notAfter := conn.ConnectionState().PeerCertificates[0].NotAfter
+	expiresAfter := time.Until(notAfter)
+	expiry := math.Round(expiresAfter.Hours() / 24)
+	output += fmt.Sprintf("certificate is valid for %v days", expiry)
 
 	return common.Output(output), nil
 }
