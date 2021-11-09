@@ -7,6 +7,7 @@ import (
 	"github.com/ycd/dstp/pkg/dstp"
 	"os"
 	"path/filepath"
+	"fmt"
 )
 
 func main() {
@@ -20,5 +21,10 @@ func main() {
 
 	ctx := context.Background()
 
-	dstp.RunAllTests(ctx, *opts)
+	err = dstp.RunAllTests(ctx, *opts)
+
+	if err != nil {
+		fmt.Print(err)
+		os.Exit(1)
+	}
 }
