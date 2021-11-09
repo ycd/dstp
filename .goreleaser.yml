@@ -17,6 +17,8 @@ builds:
       - 386
       - amd64
       - arm64
+    dir: .
+    main: cmd/main
 
 archives:
   - replacements:
