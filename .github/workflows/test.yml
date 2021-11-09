@@ -22,6 +22,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Vet and build
+      - name: Test
+        timeout-minutes: 2
         run: |
           go test ./...
