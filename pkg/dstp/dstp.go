@@ -14,10 +14,10 @@ import (
 )
 
 type Result struct {
-	Ping      string
-	DNS       string
-	TLS       string
-	HTTPS     string
+	Ping  string `json:"ping"`
+	DNS   string `json:"dns"`
+	TLS   string `json:"tls"`
+	HTTPS string `json:"https"`
 }
 
 func (r Result) Output(outputType string) string {
