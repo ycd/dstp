@@ -3,7 +3,7 @@
 
 [dstp](https://github.com/ycd/dstp) dstp, run common common networking tests against your site.
 
-![dstp gif](assets/dstp.jpeg)
+![dstp gif](assets/dstp.png)
 
 </div>
 
@@ -91,7 +91,7 @@ for 64-bit Windows, macOS, and Linux targets. They contain the compiled executab
 
    Usage: dstp [OPTIONS] [ARGS]
    Options:
-   -a, --addr   <string>  The URL or the IP address to run tests against      [REQUIRED]
+   -a, --addr   <string>  The URL or the IP address to run te![img.png](img.png)sts against      [REQUIRED]
    -o, --out    <string>  The type of the output, either json or plaintext    [Default: plaintext]
    -c           <bool>    Run all the tests concurrently.                     [Default: false]
    -h, --help             Show this message and exit.
