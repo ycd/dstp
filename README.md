@@ -21,16 +21,11 @@ Options:
 	-h, --help             Show this message and exit.
 ```
 
-Run the tests against your site
+## Motivation
 
-```
-$ dstp -c https://jvns.ca
-
-Ping: 14.282ms
-DNS: resolving 104.21.91.206
-TLS: certificate is valid for 24 days
-HTTPS: got 200 OK
-```
+A comment about a DNS thread
+on [lobste.rs](https://lobste.rs/s/qtsklv/how_do_you_tell_if_problem_is_caused_by_dns#c_1nqkdp) gave a great idea and
+thought a robust tool like that come in handy!
 
 ## Installation
 
