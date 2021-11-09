@@ -1,7 +1,7 @@
 <div align="center">
 <h1>dstp</h1>
 
-[dstp](https://github.com/ycd/dstp) dstp, run common common networking tests against your site.
+[dstp](https://github.com/ycd/dstp), run common common networking tests against your site.
 
 ![dstp gif](assets/dstp.png)
 
