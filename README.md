@@ -3,7 +3,6 @@
 
 [dstp](https://github.com/ycd/dstp) dstp, run common common networking tests against your site.
 
-
 ![dstp gif](assets/dstp.jpeg)
 
 </div>
@@ -13,58 +12,27 @@
 
 ## Usage
 
-
-
 ```
-Usage: dstp [options]
+Usage: dstp [OPTIONS] [ARGS]
 Options:
-	-p, --path      <path>   Path for the markdown file.                               [REQUIRED]
-	-a, --append    <bool>   Append toc after <!--toc-->, or write to stdout.          [Default: true]
-	-b, --bulleted  <bool>   Write as bulleted, or write as numbered list.             [Default: true] 
-	-s, --skip      <int>    Skip the first given number of headers.                   [Default: 0]
-	-d, --depth     <int>    Set the number of maximum heading level to be included.   [Default: 6]
-	-h, --help               Show this message and exit.
+	-a, --addr   <string>  The URL or the IP address to run tests against      [REQUIRED]
+	-o, --out    <string>  The type of the output, either json or plaintext    [Default: plaintext] 
+	-c           <bool>    Run all the tests concurrently.                     [Default: false]
+	-h, --help             Show this message and exit.
 ```
 
-Add `<!--toc-->`  to your markdown to the place where you want to add Table of Contents. That's it.
-
-Give the markdown file as an input with `-p`, `--path` flags.
+Run the tests against your site
 
 ```
-$ toc -p path/to/markdown.md
+$ dstp -c https://jvns.ca
+
+Ping: 14.282ms
+DNS: resolving 104.21.91.206
+TLS: certificate is valid for 24 days
+HTTPS: got 200 OK
 ```
-
-Create numbered list instead of bulleted list.
-
-```
-$ toc --bulleted=false
-```
-
-Write result to standard output instead of appending.
-
-```
-$ toc --append=false
-```
-
-Skip the first `n` number of headers via `-s`, `--skip` flags.
-
-```
-$ toc --skip 2
-```
-
-Set the number of maximum heading level to be included with `-d`, `--depth` flags.
-
-Set maximum heading level to 3 (h3)
-
-```
-$ toc --depth 3
-```
-
----
-
 
 ## Installation
-
 
 ### Packages
 
@@ -76,20 +44,10 @@ $ toc --depth 3
 
 * [ ] For Homebrew on macOS, install the [``]() formula.
 
-#### Docker
-
-It is available via two tags.
-
-You can either use `latest` or `$VERSION`.
-
-```sh
-docker run --rm -it yagizcan/dstp:latest toc
-```
-
-
 ### Downloads
 
-Binary downloads of example are available from [the releases section on GitHub](https://github.com/ycd/toc/releases/) for 64-bit Windows, macOS, and Linux targets. They contain the compiled executable.
+Binary downloads of example are available from [the releases section on GitHub](https://github.com/ycd/dstp/releases/)
+for 64-bit Windows, macOS, and Linux targets. They contain the compiled executable.
 
 | platform     |
 | ----------- | 
@@ -100,11 +58,9 @@ Binary downloads of example are available from [the releases section on GitHub](
 | [Windows 64 Bit](https://github.com/ycd/toc/releases/download/v0.2.5/toc_0.2.5_windows_x86_64.zip)
 | [Windows 32 Bit](https://github.com/ycd/toc/releases/download/v0.2.5/toc_0.2.5_windows_i386.zip)
 
-
-
 ### Installation from source
 
-0. Verify that you have Go 1.13+ installed
+0. Verify that you have Go 1.16+ installed
 
    ```
    $ go version
@@ -115,8 +71,8 @@ Binary downloads of example are available from [the releases section on GitHub](
 1. Clone this repository
 
    ```
-   $ git clone https://github.com/ycd/toc 
-   $ cd ycd
+   $ git clone https://github.com/ycd/dstp 
+   $ cd dstp
    ```
 
 2. Build and install
@@ -125,7 +81,7 @@ Binary downloads of example are available from [the releases section on GitHub](
    ```
    # May require you to use sudo
    $ go build .
-   $ cp toc /usr/local/toc
+   $ cp toc /usr/local/dstp
    ```
 
 3. Verify installation
@@ -133,17 +89,15 @@ Binary downloads of example are available from [the releases section on GitHub](
    ```
    $ dstp -h 
 
-   Usage: dstp [options]
+   Usage: dstp [OPTIONS] [ARGS]
    Options:
-      -p, --path      <path>   Path for the markdown file.                               [REQUIRED]
-      -a, --append    <bool>   Append toc after <!--toc-->, or write to stdout.          [Default: true]
-      -b, --bulleted  <bool>   Write as bulleted, or write as numbered list.             [Default: true] 
-      -s, --skip      <int>    Skip the first given number of headers.                   [Default: 0]
-      -d, --depth     <int>    Set the number of maximum heading level to be included.   [Default: 6]
-      -h, --help               Show this message and exit.
+   -a, --addr   <string>  The URL or the IP address to run tests against      [REQUIRED]
+   -o, --out    <string>  The type of the output, either json or plaintext    [Default: plaintext]
+   -c           <bool>    Run all the tests concurrently.                     [Default: false]
+   -h, --help             Show this message and exit.
    ```
----
 
+---
 
 ## Contributing
 
@@ -151,4 +105,4 @@ All kinds of Pull Requests and Feature Requests are welcomed!
 
 ## Licence
 
-toc's source code is licenced under the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0.txt).
+dstp's source code is licenced under the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0.txt).
