@@ -76,7 +76,10 @@ func RunAllTests(ctx context.Context, config config.Config) error {
 		result.HTTPS = out.String()
 	}
 
-	fmt.Println(result.Output(config.Output))
+	s := result.Output(config.Output)
+	s += "\n"
+
+	printWithColor(s)
 
 	return nil
 }
