@@ -105,4 +105,4 @@ All kinds of Pull Requests and Feature Requests are welcomed!
 
 ## Licence
 
-dstp's source code is licenced under the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0.txt).
+dstp's source code is licenced under the [MIT License](https://choosealicense.com/licenses/mit/).
