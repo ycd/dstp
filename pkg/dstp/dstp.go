@@ -8,11 +8,11 @@ import (
 	"github.com/ycd/dstp/config"
 	"github.com/ycd/dstp/pkg/common"
 	"github.com/ycd/dstp/pkg/ping"
+	"math"
 	"net/http"
 	"reflect"
 	"strings"
 	"time"
-	"math"
 )
 
 type Result struct {
@@ -99,7 +99,7 @@ func testTLS(ctx context.Context, address common.Address) (common.Output, error)
 	notAfter := conn.ConnectionState().PeerCertificates[0].NotAfter
 	expiresAfter := time.Until(notAfter)
 	expiry := math.Round(expiresAfter.Hours() / 24)
-	output += fmt.Sprintf("certificate is valid for %v days", expiry)
+	output += fmt.Sprintf("certificate is valid for %v more days", expiry)
 
 	return common.Output(output), nil
 }
