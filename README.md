@@ -41,7 +41,7 @@ brew install ycd/tap/dstp
 #### Go Install
 
 ```zsh
-go install github.com/ycd/dstp/cmd/dstp@latest
+go install github.com/ycd/dstp/cmd/dstp
 ```
 
 
