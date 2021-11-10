@@ -1,3 +1,3 @@
 
 build:
-	go build -o dstp cmd/main.go
+	go build -o dstp cmd/dstp/main.go
