@@ -38,6 +38,13 @@ For Homebrew on macOS, install the [`ycd/tap/dstp`](https://github.com/ycd/homeb
 brew install ycd/tap/dstp
 ```
 
+#### Go Install
+
+```zsh
+go install github.com/ycd/dstp/cmd/dstp@latest
+```
+
+
 ### Downloads
 
 Binary downloads of example are available from [the releases section on GitHub](https://github.com/ycd/dstp/releases/)
