@@ -49,5 +49,4 @@ func TestRunAllTests(t *testing.T) {
 			t.Fatal(err.Error())
 		}
 	}
-
 }

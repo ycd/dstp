@@ -3,7 +3,7 @@
 
 [dstp](https://github.com/ycd/dstp), run common networking tests against your site.
 
-![dstp gif](assets/img.png)
+![dstp gif](assets/dstp.png)
 
 </div>
 
