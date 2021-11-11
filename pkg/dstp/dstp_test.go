@@ -8,14 +8,25 @@ import (
 
 func TestRunAllTests(t *testing.T) {
 	ctx := context.Background()
+
 	c := config.Config{
-		Addr:       "8.8.8.8",
+		Addr:       "https://jvns.ca",
 		Output:     "plaintext",
 		ShowHelp:   false,
 		Concurrent: false,
 	}
 
-	if err := RunAllTests(ctx, c); err != nil {
-		t.Fatal(err.Error())
+	c1 := config.Config{
+		Addr:       "https://jvns.ca",
+		Output:     "plaintext",
+		ShowHelp:   false,
+		Concurrent: false,
 	}
+
+	for _, conf := range []config.Config{c, c1} {
+		if err := RunAllTests(ctx, conf); err != nil {
+			t.Fatal(err.Error())
+		}
+	}
+
 }
