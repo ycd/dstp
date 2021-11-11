@@ -30,7 +30,21 @@ func TestRunAllTests(t *testing.T) {
 		Concurrent: false,
 	}
 
-	for _, conf := range []config.Config{c, c1, c2} {
+	c3 := config.Config{
+		Addr:       "https://meta.stackoverflow.com/",
+		Output:     "plaintext",
+		ShowHelp:   false,
+		Concurrent: false,
+	}
+
+	c4 := config.Config{
+		Addr:       "facebook.com:80",
+		Output:     "plaintext",
+		ShowHelp:   false,
+		Concurrent: false,
+	}
+
+	for _, conf := range []config.Config{c, c1, c2, c3, c4} {
 		if err := RunAllTests(ctx, conf); err != nil {
 			t.Fatal(err.Error())
 		}

@@ -12,7 +12,6 @@ import (
 	"math"
 	"net/http"
 	"reflect"
-	"strings"
 	"time"
 )
 
@@ -46,12 +45,9 @@ func (r Result) Output(outputType string) string {
 func RunAllTests(ctx context.Context, config config.Config) error {
 	var result Result
 
-	addr := config.Addr
-
-	for _, prefix := range []string{"https://", "http://"} {
-		if strings.HasPrefix(addr, prefix) {
-			addr = strings.ReplaceAll(addr, prefix, "")
-		}
+	addr, err := getAddr(config.Addr)
+	if err != nil {
+		return err
 	}
 
 	if out, err := ping.RunTest(ctx, common.Address(addr)); err != nil {
