@@ -17,7 +17,14 @@ func TestRunAllTests(t *testing.T) {
 	}
 
 	c1 := config.Config{
-		Addr:       "https://jvns.ca",
+		Addr:       "8.8.8.8",
+		Output:     "plaintext",
+		ShowHelp:   false,
+		Concurrent: false,
+	}
+
+	c1 := config.Config{
+		Addr:       "facebook.com",
 		Output:     "plaintext",
 		ShowHelp:   false,
 		Concurrent: false,
