@@ -7,19 +7,20 @@ import (
 	"fmt"
 	"github.com/ycd/dstp/config"
 	"github.com/ycd/dstp/pkg/common"
+	"github.com/ycd/dstp/pkg/lookup"
 	"github.com/ycd/dstp/pkg/ping"
 	"math"
 	"net/http"
 	"reflect"
-	"strings"
 	"time"
 )
 
 type Result struct {
-	Ping  string `json:"ping"`
-	DNS   string `json:"dns"`
-	TLS   string `json:"tls"`
-	HTTPS string `json:"https"`
+	Ping      string `json:"ping"`
+	DNS       string `json:"dns"`
+	SystemDNS string `json:"system_dns"`
+	TLS       string `json:"tls"`
+	HTTPS     string `json:"https"`
 }
 
 func (r Result) Output(outputType string) string {
@@ -44,12 +45,9 @@ func (r Result) Output(outputType string) string {
 func RunAllTests(ctx context.Context, config config.Config) error {
 	var result Result
 
-	addr := config.Addr
-
-	for _, prefix := range []string{"https://", "http://"} {
-		if strings.HasPrefix(addr, prefix) {
-			addr = strings.ReplaceAll(addr, prefix, "")
-		}
+	addr, err := getAddr(config.Addr)
+	if err != nil {
+		return err
 	}
 
 	if out, err := ping.RunTest(ctx, common.Address(addr)); err != nil {
@@ -62,6 +60,12 @@ func RunAllTests(ctx context.Context, config config.Config) error {
 		result.DNS = err.Error()
 	} else {
 		result.DNS = out.String()
+	}
+
+	if out, err := lookup.Host(ctx, common.Address(addr)); err != nil {
+		result.SystemDNS = err.Error()
+	} else {
+		result.SystemDNS = out.String()
 	}
 
 	if out, err := testTLS(ctx, common.Address(addr)); err != nil {
