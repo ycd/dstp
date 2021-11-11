@@ -58,18 +58,16 @@ func ConfigureOptions(fs *flag.FlagSet, args []string) (*Config, error) {
 		HelpAndExit()
 	}
 
-	if !opts.ShowHelp && len(values) < 1 {
+	if !opts.ShowHelp && len(values) < 1 && opts.Addr == "" {
 		HelpAndExit()
 	}
 
-	if len(values) > 1 {
-		return nil, fmt.Errorf("expected one argument, got %v", len(values))
-	}
-
-	if opts.Addr == "" && len(values) >= 1 {
-		opts.Addr = values[0]
-	} else {
-		return nil, fmt.Errorf("address cannot be empty")
+	if opts.Addr == "" {
+		if len(values) >= 1 {
+			opts.Addr = values[0]
+		} else {
+			return nil, fmt.Errorf("address cannot be empty")
+		}
 	}
 
 	return opts, nil
