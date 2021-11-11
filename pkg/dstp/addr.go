@@ -38,8 +38,9 @@ func getAddr(addr string) (string, error) {
 					return "", fmt.Errorf("failed to parse url: %v", err.Error())
 				}
 				pu = uu.Hostname()
+			} else {
+				pu = u.Host
 			}
-			pu = u.Host
 		} else {
 			// If URI doesn't have any slash in it, the first part is considered as scheme
 			if parsedURL.Hostname() == "" {
