@@ -23,14 +23,14 @@ func TestRunAllTests(t *testing.T) {
 		Concurrent: false,
 	}
 
-	c1 := config.Config{
+	c2 := config.Config{
 		Addr:       "facebook.com",
 		Output:     "plaintext",
 		ShowHelp:   false,
 		Concurrent: false,
 	}
 
-	for _, conf := range []config.Config{c, c1} {
+	for _, conf := range []config.Config{c, c1, c2} {
 		if err := RunAllTests(ctx, conf); err != nil {
 			t.Fatal(err.Error())
 		}
