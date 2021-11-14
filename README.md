@@ -44,6 +44,22 @@ brew install ycd/tap/dstp
 go install github.com/ycd/dstp/cmd/dstp
 ```
 
+#### NixOS
+
+1. Add `dstp`to `/etc/nixos/configuration.nix`:
+
+```nix
+environment.systemPackages = with pkgs; [
+  dstp
+];
+```
+
+2. Run:
+
+```zsh
+sudo nixos-rebuild switch
+```
+
 
 ### Downloads
 
@@ -62,7 +78,7 @@ for 64-bit Windows, macOS, and Linux targets. They contain the compiled executab
 
 ### Installation from source
 
-0. Verify that you have Go 1.16+ installed
+0. Verify that you have Go 1.17+ installed (The source code uses _( `//go:build` )_ conditional compilation directives that is introduced in Go 1.17.)
 
    ```
    $ go version
@@ -82,7 +98,7 @@ for 64-bit Windows, macOS, and Linux targets. They contain the compiled executab
    #### Unix/Linux
    ```
    # May require you to use sudo
-   $ go build .
+   $ go build cmd/dstp/main.go
    $ cp dstp /usr/local/bin/dstp
    ```
 
