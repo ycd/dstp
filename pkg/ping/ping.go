@@ -3,11 +3,13 @@ package ping
 import (
 	"context"
 	"fmt"
-	"github.com/ycd/dstp/pkg/common"
 	"strings"
+	"time"
+
+	"github.com/ycd/dstp/pkg/common"
 )
 
-func RunTest(ctx context.Context, addr common.Address) (common.Output, error) {
+func RunTest(ctx context.Context, addr common.Address, count int, timeout int) (common.Output, error) {
 	var output string
 
 	pinger, err := createPinger(addr.String())
@@ -15,14 +17,23 @@ func RunTest(ctx context.Context, addr common.Address) (common.Output, error) {
 		return "", err
 	}
 
-	pinger.Count = 3
+	pinger.Count = count
+	if timeout == -1 {
+		pinger.Timeout = time.Duration(10*count) * time.Second
+	} else {
+		pinger.Timeout = time.Duration(timeout) * time.Second
+	}
 	err = pinger.Run()
 	if err != nil {
 		return "", fmt.Errorf("failed to run ping: %v", err.Error())
 	}
 
 	stats := pinger.Statistics()
-	output += joinS(joinC(stats.AvgRtt.String()))
+	if stats.PacketsRecv == 0 {
+		output += "no response"
+	} else {
+		output += joinS(joinC(stats.AvgRtt.String()))
+	}
 
 	return common.Output(output), nil
 }
@@ -35,7 +46,7 @@ func joinS(args ...string) string {
 	return strings.Join(args, " ")
 }
 
-func RunDNSTest(ctx context.Context, addr common.Address) (common.Output, error) {
+func RunDNSTest(ctx context.Context, addr common.Address, count int, timeout int) (common.Output, error) {
 	var output string
 
 	pinger, err := createPinger(addr.String())
@@ -43,7 +54,12 @@ func RunDNSTest(ctx context.Context, addr common.Address) (common.Output, error)
 		return "", err
 	}
 
-	pinger.Count = 3
+	pinger.Count = count
+	if timeout == -1 {
+		pinger.Timeout = time.Duration(10*count) * time.Second
+	} else {
+		pinger.Timeout = time.Duration(timeout) * time.Second
+	}
 	err = pinger.Run()
 	if err != nil {
 		return "", fmt.Errorf("failed to run ping: %v", err.Error())

@@ -5,14 +5,15 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	"github.com/ycd/dstp/config"
-	"github.com/ycd/dstp/pkg/common"
-	"github.com/ycd/dstp/pkg/lookup"
-	"github.com/ycd/dstp/pkg/ping"
 	"math"
 	"net/http"
 	"reflect"
 	"time"
+
+	"github.com/ycd/dstp/config"
+	"github.com/ycd/dstp/pkg/common"
+	"github.com/ycd/dstp/pkg/lookup"
+	"github.com/ycd/dstp/pkg/ping"
 )
 
 type Result struct {
@@ -50,13 +51,13 @@ func RunAllTests(ctx context.Context, config config.Config) error {
 		return err
 	}
 
-	if out, err := ping.RunTest(ctx, common.Address(addr)); err != nil {
+	if out, err := ping.RunTest(ctx, common.Address(addr), config.PingCount, config.Timeout); err != nil {
 		result.Ping = err.Error()
 	} else {
 		result.Ping = out.String()
 	}
 
-	if out, err := ping.RunDNSTest(ctx, common.Address(addr)); err != nil {
+	if out, err := ping.RunDNSTest(ctx, common.Address(addr), config.PingCount, config.Timeout); err != nil {
 		result.DNS = err.Error()
 	} else {
 		result.DNS = out.String()
