@@ -25,4 +25,5 @@ jobs:
       - name: Test
         timeout-minutes: 2
         run: |
+          go build cmd/dstp/main.go
           go test -v ./...
