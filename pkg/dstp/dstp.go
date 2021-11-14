@@ -106,7 +106,7 @@ func testTLS(ctx context.Context, address common.Address) (common.Output, error)
 	if expiry > 0 {
 		output += fmt.Sprintf("certificate is valid for %v more days", expiry)
 	} else {
-		output += fmt.Sprintf("the certificate expired %v days ago", expiry)
+		output += fmt.Sprintf("the certificate expired %v days ago", -expiry)
 	}
 
 	return common.Output(output), nil
