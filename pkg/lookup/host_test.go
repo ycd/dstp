@@ -1,3 +1,5 @@
+//go:build integration || darwin
+
 package lookup
 
 import (
