@@ -103,7 +103,11 @@ func testTLS(ctx context.Context, address common.Address) (common.Output, error)
 	notAfter := conn.ConnectionState().PeerCertificates[0].NotAfter
 	expiresAfter := time.Until(notAfter)
 	expiry := math.Round(expiresAfter.Hours() / 24)
-	output += fmt.Sprintf("certificate is valid for %v more days", expiry)
+	if expiry > 0 {
+		output += fmt.Sprintf("certificate is valid for %v more days", expiry)
+	} else {
+		output += fmt.Sprintf("the certificate expired %v days ago", expiry)
+	}
 
 	return common.Output(output), nil
 }
