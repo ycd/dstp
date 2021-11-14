@@ -48,7 +48,7 @@ go install github.com/ycd/dstp/cmd/dstp
 
 1. Add `dstp`to `/etc/nixos/configuration.nix`:
 
-```nix
+```
 environment.systemPackages = with pkgs; [
   dstp
 ];
