@@ -16,6 +16,8 @@ func TestRunAllTests(t *testing.T) {
 		Output:     "plaintext",
 		ShowHelp:   false,
 		Concurrent: false,
+		Timeout:    10,
+		PingCount:  3,
 	}
 
 	c1 := config.Config{
@@ -23,6 +25,8 @@ func TestRunAllTests(t *testing.T) {
 		Output:     "plaintext",
 		ShowHelp:   false,
 		Concurrent: false,
+		Timeout:    10,
+		PingCount:  3,
 	}
 
 	c2 := config.Config{
@@ -30,6 +34,8 @@ func TestRunAllTests(t *testing.T) {
 		Output:     "plaintext",
 		ShowHelp:   false,
 		Concurrent: false,
+		Timeout:    10,
+		PingCount:  3,
 	}
 
 	c3 := config.Config{
@@ -37,6 +43,8 @@ func TestRunAllTests(t *testing.T) {
 		Output:     "plaintext",
 		ShowHelp:   false,
 		Concurrent: false,
+		Timeout:    10,
+		PingCount:  3,
 	}
 
 	c4 := config.Config{
@@ -44,6 +52,8 @@ func TestRunAllTests(t *testing.T) {
 		Output:     "plaintext",
 		ShowHelp:   false,
 		Concurrent: false,
+		Timeout:    10,
+		PingCount:  3,
 	}
 
 	for _, conf := range []config.Config{c, c1, c2, c3, c4} {
