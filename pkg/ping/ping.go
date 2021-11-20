@@ -71,12 +71,12 @@ func runPingFallback(ctx context.Context, addr common.Address, count int, timeou
 		return common.Output(""), err
 	}
 
-	return common.Output(po.AvgRTT), nil
+	return common.Output(po.AvgRTT + "ms"), nil
 }
 
 func executeCommand(shell, command string) (string, error) {
 	var errb bytes.Buffer
-	var out bytes.Buffer
+	var out string
 
 	cmd := exec.Command(shell, "-c", command)
 	cmd.Stderr = &errb
@@ -91,14 +91,14 @@ func executeCommand(shell, command string) (string, error) {
 
 	scanner := bufio.NewScanner(stdout)
 	for scanner.Scan() {
-		out.Write(scanner.Bytes())
+		out += scanner.Text() + "\n"
 	}
 
 	if err := cmd.Wait(); err != nil {
 		return "", fmt.Errorf("got error: %v, stderr: %v", err, errb.String())
 	}
 
-	return out.String(), nil
+	return out, nil
 }
 
 type pingOutput struct {
@@ -112,7 +112,7 @@ type pingOutput struct {
 
 var (
 	RequestTimeoutError = fmt.Errorf("requests timed out")
-	PacketLossError     = fmt.Errorf("100.0%% packet loss")
+	PacketLossError     = fmt.Errorf("timeout error: 100.0%% packet loss")
 )
 
 // parsePingOutput parses the output of ping by parsing the stdout
@@ -134,14 +134,14 @@ func parsePingOutput(out string) (pingOutput, error) {
 
 	for _, line := range lines {
 		switch {
-		case strings.Contains(line, "packets transmitted") && strings.Contains(line, "packets received"):
+		case strings.Contains(line, "packets transmitted"):
 			arr := strings.Split(line, ",")
-
+			fmt.Println(arr)
 			if len(arr) != 3 {
 				continue
 			}
 
-			po.MinRTT, po.AvgRTT, po.MaxRTT = arr[0], arr[1], arr[2]
+			po.PacketTransmitted, po.PacketReceived, po.PacketLoss = arr[0], arr[1], arr[2]
 
 		case strings.Contains(line, "round-trip min/avg/max"):
 			l := strings.ReplaceAll(line, " = ", " ")
