@@ -112,7 +112,7 @@ type pingOutput struct {
 
 var (
 	RequestTimeoutError = fmt.Errorf("requests timed out")
-	PacketLossError     = fmt.Errorf("100.0% packet loss")
+	PacketLossError     = fmt.Errorf("100.0%% packet loss")
 )
 
 // parsePingOutput parses the output of ping by parsing the stdout
