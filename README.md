@@ -62,6 +62,14 @@ environment.systemPackages = with pkgs; [
 sudo nixos-rebuild switch
 ```
 
+#### Arch Linux
+
+```bash
+git clone https://aur.archlinux.org/dstp.git
+cd dstp
+makepkg -sri
+```
+
 ### Downloads
 
 Binary downloads of example are available from [the releases section on GitHub](https://github.com/ycd/dstp/releases/)
