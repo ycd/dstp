@@ -18,6 +18,8 @@ Options:
 	-a, --addr   <string>  The URL or the IP address to run tests against      [REQUIRED]
 	-o, --out    <string>  The type of the output, either json or plaintext    [Default: plaintext] 
 	-c           <bool>    Run all the tests concurrently.                     [Default: false]
+	-p           <int>     Number of ping packets                              [Default: 3]
+	-t           <int>     Give up on ping after this many seconds             [Default: 2s per ping packet]
 	-h, --help             Show this message and exit.
 ```
 
@@ -60,7 +62,6 @@ environment.systemPackages = with pkgs; [
 sudo nixos-rebuild switch
 ```
 
-
 ### Downloads
 
 Binary downloads of example are available from [the releases section on GitHub](https://github.com/ycd/dstp/releases/)
@@ -78,7 +79,8 @@ for 64-bit Windows, macOS, and Linux targets. They contain the compiled executab
 
 ### Installation from source
 
-0. Verify that you have Go 1.17+ installed (The source code uses _( `//go:build` )_ conditional compilation directives that is introduced in Go 1.17.)
+0. Verify that you have Go 1.17+ installed (The source code uses _( `//go:build` )_ conditional compilation directives
+   that is introduced in Go 1.17.)
 
    ```
    $ go version
@@ -116,9 +118,11 @@ for 64-bit Windows, macOS, and Linux targets. They contain the compiled executab
 
    Usage: dstp [OPTIONS] [ARGS]
    Options:
-   -a, --addr   <string>  The URL or the IP address to run te![img.png](img.png)sts against      [REQUIRED]
+   -a, --addr   <string>  The URL or the IP address to run tests against      [REQUIRED]
    -o, --out    <string>  The type of the output, either json or plaintext    [Default: plaintext]
    -c           <bool>    Run all the tests concurrently.                     [Default: false]
+   -p           <int>     Number of ping packets                              [Default: 3]
+   -t           <int>     Give up on ping after this many seconds             [Default: 2s per ping packet]
    -h, --help             Show this message and exit.
    ```
 
