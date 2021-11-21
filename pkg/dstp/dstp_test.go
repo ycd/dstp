@@ -16,7 +16,7 @@ func TestRunAllTests(t *testing.T) {
 		Output:     "plaintext",
 		ShowHelp:   false,
 		Concurrent: false,
-		Timeout:    10,
+		Timeout:    3,
 		PingCount:  3,
 	}
 
@@ -25,7 +25,7 @@ func TestRunAllTests(t *testing.T) {
 		Output:     "plaintext",
 		ShowHelp:   false,
 		Concurrent: false,
-		Timeout:    10,
+		Timeout:    3,
 		PingCount:  3,
 	}
 
@@ -34,7 +34,7 @@ func TestRunAllTests(t *testing.T) {
 		Output:     "plaintext",
 		ShowHelp:   false,
 		Concurrent: false,
-		Timeout:    10,
+		Timeout:    3,
 		PingCount:  3,
 	}
 
@@ -43,7 +43,7 @@ func TestRunAllTests(t *testing.T) {
 		Output:     "plaintext",
 		ShowHelp:   false,
 		Concurrent: false,
-		Timeout:    10,
+		Timeout:    3,
 		PingCount:  3,
 	}
 
@@ -52,7 +52,7 @@ func TestRunAllTests(t *testing.T) {
 		Output:     "plaintext",
 		ShowHelp:   false,
 		Concurrent: false,
-		Timeout:    10,
+		Timeout:    3,
 		PingCount:  3,
 	}
 
