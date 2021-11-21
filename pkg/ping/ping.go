@@ -42,7 +42,11 @@ func runPing(ctx context.Context, addr common.Address, count int, timeout int) (
 	} else {
 		stats := pinger.Statistics()
 		if stats.PacketsRecv == 0 {
-			output += "no response"
+			if out, err := runPingFallback(ctx, addr, count, timeout); err == nil {
+				output += out.String()
+			} else {
+				output += "no response"
+			}
 		} else {
 			output += joinS(joinC(stats.AvgRtt.String()))
 		}
