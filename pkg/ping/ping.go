@@ -61,10 +61,6 @@ func runPingFallback(ctx context.Context, addr common.Address, count int, timeou
 	args := fmt.Sprintf("-c %v -t %v", count, timeout)
 	command := fmt.Sprintf("ping %s %s", args, addr.String())
 
-	if runtime.GOOS == "windows" {
-		return common.Output(""), fmt.Errorf("fallback is not implemented for windows")
-	}
-
 	out, err := executeCommand("bash", command)
 	if err != nil {
 		return common.Output(""), err
@@ -82,7 +78,12 @@ func executeCommand(shell, command string) (string, error) {
 	var errb bytes.Buffer
 	var out string
 
-	cmd := exec.Command(shell, "-c", command)
+	var cmd *exec.Cmd
+	if runtime.GOOS == "windows" {
+		cmd = exec.Command("cmd", "/c", command)
+	} else {
+		cmd = exec.Command(shell, "-c", command)
+	}
 	cmd.Stderr = &errb
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {

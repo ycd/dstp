@@ -1,4 +1,4 @@
-//go:build integration || darwin || !windows
+//go:build integration
 
 package dstp
 
