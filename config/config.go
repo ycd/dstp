@@ -24,7 +24,7 @@ Options:
 	-o, --out    <string>  The type of the output, either json or plaintext    [Default: plaintext] 
 	-c           <bool>    Run all the tests concurrently.                     [Default: false]
 	-p           <int>     Number of ping packets                              [Default: 3]
-	-t           <int>     Give up on ping after this many seconds             [Default: 10s per ping packet]
+	-t           <int>     Give up on ping after this many seconds             [Default: 2s per ping packet]
 	-h, --help             Show this message and exit.
 `
 

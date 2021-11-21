@@ -17,7 +17,7 @@ func RunDNSTest(ctx context.Context, addr common.Address, count int, timeout int
 
 	pinger.Count = count
 	if timeout == -1 {
-		pinger.Timeout = time.Duration(10*count) * time.Second
+		pinger.Timeout = time.Duration(2*count) * time.Second
 	} else {
 		pinger.Timeout = time.Duration(timeout) * time.Second
 	}
