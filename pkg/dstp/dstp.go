@@ -75,7 +75,7 @@ func RunAllTests(ctx context.Context, config config.Config) error {
 		result.TLS = out.String()
 	}
 
-	if out, err := testHTTPS(ctx, common.Address(addr)); err != nil {
+	if out, err := testHTTPS(ctx, common.Address(addr), config.Timeout); err != nil {
 		result.HTTPS = err.Error()
 	} else {
 		result.HTTPS = out.String()
@@ -113,10 +113,17 @@ func testTLS(ctx context.Context, address common.Address) (common.Output, error)
 	return common.Output(output), nil
 }
 
-func testHTTPS(ctx context.Context, address common.Address) (common.Output, error) {
+func testHTTPS(ctx context.Context, address common.Address, t int) (common.Output, error) {
 	var output string
 
-	resp, err := http.Get(fmt.Sprintf("https://%s", address))
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("https://%s", address), nil)
+	if err != nil {
+		return "", err
+	}
+	client := http.Client{
+		Timeout: time.Second * time.Duration(t),
+	}
+	resp, err := client.Do(req)
 	if err != nil {
 		return "", err
 	}
