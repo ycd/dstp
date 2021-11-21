@@ -120,9 +120,11 @@ func testHTTPS(ctx context.Context, address common.Address, t int) (common.Outpu
 	if err != nil {
 		return "", err
 	}
+
 	client := http.Client{
 		Timeout: time.Second * time.Duration(t),
 	}
+
 	resp, err := client.Do(req)
 	if err != nil {
 		return "", err
