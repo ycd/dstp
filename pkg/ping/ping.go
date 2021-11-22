@@ -20,6 +20,7 @@ func RunTest(ctx context.Context, wg *sync.WaitGroup, addr common.Address, count
 }
 
 func runPing(ctx context.Context, wg *sync.WaitGroup, addr common.Address, count int, timeout int, result *common.Result) error {
+	var output string
 	defer wg.Done()
 
 	pinger, err := createPinger(addr.String())
@@ -36,9 +37,7 @@ func runPing(ctx context.Context, wg *sync.WaitGroup, addr common.Address, count
 	err = pinger.Run()
 	if err != nil {
 		if out, err := runPingFallback(ctx, addr, count, timeout); err == nil {
-			result.Mu.Lock()
-			result.Ping = out.String()
-			result.Mu.Unlock()
+			output = out.String()
 		} else {
 			return fmt.Errorf("failed to run ping: %v", err.Error())
 		}
@@ -46,20 +45,18 @@ func runPing(ctx context.Context, wg *sync.WaitGroup, addr common.Address, count
 		stats := pinger.Statistics()
 		if stats.PacketsRecv == 0 {
 			if out, err := runPingFallback(ctx, addr, count, timeout); err == nil {
-				result.Mu.Lock()
-				result.Ping = out.String()
-				result.Mu.Unlock()
+				output = out.String()
 			} else {
-				result.Mu.Lock()
-				result.Ping = "no response"
-				result.Mu.Unlock()
+				output = "no response"
 			}
 		} else {
-			result.Mu.Lock()
-			result.Ping += joinS(joinC(stats.AvgRtt.String()))
-			result.Mu.Unlock()
+			output = joinS(joinC(stats.AvgRtt.String()))
 		}
 	}
+
+	result.Mu.Lock()
+	result.Ping = output
+	result.Mu.Unlock()
 
 	return nil
 }
