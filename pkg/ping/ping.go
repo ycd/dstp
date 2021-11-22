@@ -67,7 +67,6 @@ func runPingFallback(ctx context.Context, addr common.Address, count int) (commo
 	args := fmt.Sprintf("-c %v", count)
 	command := fmt.Sprintf("ping %s %s", args, addr.String())
 
-	var err error
 	// This is not handled because the ping
 	// writes the output to stdout whether it fails or not
 	out, err := executeCommand(command)
