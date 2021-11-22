@@ -5,15 +5,18 @@ import (
 	"github.com/ycd/dstp/pkg/common"
 	"net"
 	"strings"
+	"sync"
 )
 
-func Host(ctx context.Context, addr common.Address) (common.Output, error) {
+func Host(ctx context.Context, wg *sync.WaitGroup, addr common.Address, result *common.Result) error {
+	defer wg.Done()
+
 	addrs, err := net.LookupHost(addr.String())
 	if err != nil {
-		return "", err
+		return err
 	}
 
-	output := "resolving " + strings.Join(addrs, ", ")
+	result.SystemDNS = "resolving " + strings.Join(addrs, ", ")
 
-	return common.Output(output), nil
+	return nil
 }

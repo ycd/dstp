@@ -9,21 +9,23 @@ import (
 	"os/exec"
 	"runtime"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/ycd/dstp/pkg/common"
 )
 
-func RunTest(ctx context.Context, addr common.Address, count int, timeout int) (common.Output, error) {
-	return runPing(ctx, addr, count, timeout)
+func RunTest(ctx context.Context, wg *sync.WaitGroup, addr common.Address, count int, timeout int, result *common.Result) error {
+	return runPing(ctx, wg, addr, count, timeout, result)
 }
 
-func runPing(ctx context.Context, addr common.Address, count int, timeout int) (common.Output, error) {
+func runPing(ctx context.Context, wg *sync.WaitGroup, addr common.Address, count int, timeout int, result *common.Result) error {
 	var output string
+	defer wg.Done()
 
 	pinger, err := createPinger(addr.String())
 	if err != nil {
-		return "", err
+		return err
 	}
 
 	pinger.Count = count
@@ -35,24 +37,28 @@ func runPing(ctx context.Context, addr common.Address, count int, timeout int) (
 	err = pinger.Run()
 	if err != nil {
 		if out, err := runPingFallback(ctx, addr, count, timeout); err == nil {
-			output += out.String()
+			output = out.String()
 		} else {
-			return "", fmt.Errorf("failed to run ping: %v", err.Error())
+			return fmt.Errorf("failed to run ping: %v", err.Error())
 		}
 	} else {
 		stats := pinger.Statistics()
 		if stats.PacketsRecv == 0 {
 			if out, err := runPingFallback(ctx, addr, count, timeout); err == nil {
-				output += out.String()
+				output = out.String()
 			} else {
-				output += "no response"
+				output = "no response"
 			}
 		} else {
-			output += joinS(joinC(stats.AvgRtt.String()))
+			output = joinS(joinC(stats.AvgRtt.String()))
 		}
 	}
 
-	return common.Output(output), nil
+	result.Mu.Lock()
+	result.Ping = output
+	result.Mu.Unlock()
+
+	return nil
 }
 
 // runPingFallback executes the ping command from cli

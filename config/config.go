@@ -9,12 +9,11 @@ import (
 )
 
 type Config struct {
-	Addr       string
-	Output     string
-	PingCount  int
-	Timeout    int
-	ShowHelp   bool
-	Concurrent bool
+	Addr      string
+	Output    string
+	PingCount int
+	Timeout   int
+	ShowHelp  bool
 }
 
 var usageStr = `
@@ -22,7 +21,6 @@ Usage: dstp [OPTIONS] [ARGS]
 Options:
 	-a, --addr   <string>  The URL or the IP address to run tests against      [REQUIRED]
 	-o, --out    <string>  The type of the output, either json or plaintext    [Default: plaintext] 
-	-c           <bool>    Run all the tests concurrently.                     [Default: false]
 	-p           <int>     Number of ping packets                              [Default: 3]
 	-t           <int>     Give up on ping after this many seconds             [Default: 2s per ping packet]
 	-h, --help             Show this message and exit.
@@ -52,7 +50,6 @@ func ConfigureOptions(fs *flag.FlagSet, args []string) (*Config, error) {
 	fs.StringVar(&opts.Output, "out", "plaintext", "The type of the output")
 	fs.IntVar(&opts.PingCount, "p", 3, "Number of ping packets")
 	fs.IntVar(&opts.Timeout, "t", -1, "Give up on ping after this many seconds")
-	fs.BoolVar(&opts.Concurrent, "c", false, "Run all the tests concurrently")
 	fs.BoolVar(&opts.ShowHelp, "h", false, "Show help message")
 	fs.BoolVar(&opts.ShowHelp, "help", false, "Show help message")
 

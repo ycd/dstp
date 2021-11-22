@@ -3,11 +3,10 @@ package dstp
 import (
 	"context"
 	"crypto/tls"
-	"encoding/json"
 	"fmt"
 	"math"
 	"net/http"
-	"reflect"
+	"sync"
 	"time"
 
 	"github.com/ycd/dstp/config"
@@ -16,70 +15,28 @@ import (
 	"github.com/ycd/dstp/pkg/ping"
 )
 
-type Result struct {
-	Ping      string `json:"ping"`
-	DNS       string `json:"dns"`
-	SystemDNS string `json:"system_dns"`
-	TLS       string `json:"tls"`
-	HTTPS     string `json:"https"`
-}
-
-func (r Result) Output(outputType string) string {
-	var output string
-
-	switch outputType {
-	case "plaintext":
-		v := reflect.ValueOf(r)
-		for i := 0; i < v.NumField(); i++ {
-			output += fmt.Sprintf("%s: %v\n", common.White(v.Type().Field(i).Name), common.Green(v.Field(i).Interface()))
-		}
-	case "json":
-		// SAFETY: we are sure that this never fails
-		byt, _ := json.MarshalIndent(r, "", "  ")
-		output += string(byt)
-	}
-
-	return output
-}
-
 // RunAllTests executes all the tests against the given domain, IP or DNS server.
 func RunAllTests(ctx context.Context, config config.Config) error {
-	var result Result
+	var result common.Result
 
 	addr, err := getAddr(config.Addr)
 	if err != nil {
 		return err
 	}
 
-	if out, err := ping.RunTest(ctx, common.Address(addr), config.PingCount, config.Timeout); err != nil {
-		result.Ping = err.Error()
-	} else {
-		result.Ping = out.String()
-	}
+	var wg sync.WaitGroup
+	wg.Add(5)
 
-	if out, err := ping.RunDNSTest(ctx, common.Address(addr), config.PingCount, config.Timeout); err != nil {
-		result.DNS = err.Error()
-	} else {
-		result.DNS = out.String()
-	}
+	go ping.RunTest(ctx, &wg, common.Address(addr), config.PingCount, config.Timeout, &result)
 
-	if out, err := lookup.Host(ctx, common.Address(addr)); err != nil {
-		result.SystemDNS = err.Error()
-	} else {
-		result.SystemDNS = out.String()
-	}
+	go ping.RunDNSTest(ctx, &wg, common.Address(addr), config.PingCount, config.Timeout, &result)
 
-	if out, err := testTLS(ctx, common.Address(addr)); err != nil {
-		result.TLS = err.Error()
-	} else {
-		result.TLS = out.String()
-	}
+	go lookup.Host(ctx, &wg, common.Address(addr), &result)
 
-	if out, err := testHTTPS(ctx, common.Address(addr), config.Timeout); err != nil {
-		result.HTTPS = err.Error()
-	} else {
-		result.HTTPS = out.String()
-	}
+	go testTLS(ctx, &wg, common.Address(addr), &result)
+
+	go testHTTPS(ctx, &wg, common.Address(addr), config.Timeout, &result)
+	wg.Wait()
 
 	s := result.Output(config.Output)
 	s += "\n"
@@ -89,16 +46,17 @@ func RunAllTests(ctx context.Context, config config.Config) error {
 	return nil
 }
 
-func testTLS(ctx context.Context, address common.Address) (common.Output, error) {
+func testTLS(ctx context.Context, wg *sync.WaitGroup, address common.Address, result *common.Result) error {
 	var output string
+	defer wg.Done()
 
 	conn, err := tls.Dial("tcp", fmt.Sprintf("%s:443", string(address)), nil)
 	if err != nil {
-		return "", err
+		return err
 	}
 	err = conn.VerifyHostname(string(address))
 	if err != nil {
-		return "", err
+		return err
 	}
 
 	notAfter := conn.ConnectionState().PeerCertificates[0].NotAfter
@@ -110,15 +68,19 @@ func testTLS(ctx context.Context, address common.Address) (common.Output, error)
 		output += fmt.Sprintf("the certificate expired %v days ago", -expiry)
 	}
 
-	return common.Output(output), nil
+	result.Mu.Lock()
+	result.TLS = output
+	result.Mu.Unlock()
+
+	return nil
 }
 
-func testHTTPS(ctx context.Context, address common.Address, t int) (common.Output, error) {
-	var output string
+func testHTTPS(ctx context.Context, wg *sync.WaitGroup, address common.Address, t int, result *common.Result) error {
+	defer wg.Done()
 
 	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("https://%s", address), nil)
 	if err != nil {
-		return "", err
+		return err
 	}
 
 	client := http.Client{
@@ -127,9 +89,12 @@ func testHTTPS(ctx context.Context, address common.Address, t int) (common.Outpu
 
 	resp, err := client.Do(req)
 	if err != nil {
-		return "", err
+		return err
 	}
 
-	output += fmt.Sprintf("got %s", resp.Status)
-	return common.Output(output), nil
+	result.Mu.Lock()
+	result.HTTPS = fmt.Sprintf("got %s", resp.Status)
+	result.Mu.Unlock()
+
+	return nil
 }
