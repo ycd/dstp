@@ -4,16 +4,20 @@ package lookup
 
 import (
 	"context"
-	"log"
+	"github.com/ycd/dstp/pkg/common"
+	"sync"
 	"testing"
 )
 
 func TestLookup(t *testing.T) {
-	out, err := Host(context.Background(), "jvns.ca")
+	var wg sync.WaitGroup
+	var result common.Result
+	err := Host(context.Background(), &wg, "jvns.ca", &result)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	log.Println(out.String())
-
+	if result.SystemDNS == "" {
+		t.Fatal(err)
+	}
 }
