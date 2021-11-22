@@ -170,8 +170,6 @@ func parsePingOutput(out string) (pingOutput, error) {
 	}
 
 	if po.MinRTT == "" && po.AvgRTT == "" && po.MaxRTT == "" {
-		log.Println(out)
-		log.Println(po)
 		return po, RequestTimeoutError
 	}
 
