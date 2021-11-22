@@ -4,15 +4,16 @@ import (
 	"context"
 	"fmt"
 	"github.com/ycd/dstp/pkg/common"
+	"sync"
 	"time"
 )
 
-func RunDNSTest(ctx context.Context, addr common.Address, count int, timeout int) (common.Output, error) {
-	var output string
+func RunDNSTest(ctx context.Context, wg *sync.WaitGroup, addr common.Address, count int, timeout int, result *common.Result) error {
+	defer wg.Done()
 
 	pinger, err := createPinger(addr.String())
 	if err != nil {
-		return "", err
+		return err
 	}
 
 	pinger.Count = count
@@ -23,9 +24,11 @@ func RunDNSTest(ctx context.Context, addr common.Address, count int, timeout int
 	}
 	err = pinger.Run()
 	if err != nil {
-		return "", fmt.Errorf("failed to run ping: %v", err.Error())
+		return fmt.Errorf("failed to run ping: %v", err.Error())
 	}
 
-	output += joinS("resolving", pinger.IPAddr().String())
-	return common.Output(output), nil
+	result.Mu.Lock()
+	result.DNS = joinS("resolving", pinger.IPAddr().String())
+	result.Mu.Unlock()
+	return nil
 }

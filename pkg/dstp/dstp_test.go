@@ -15,7 +15,6 @@ func TestRunAllTests(t *testing.T) {
 		Addr:       "https://jvns.ca",
 		Output:     "plaintext",
 		ShowHelp:   false,
-		Concurrent: false,
 		Timeout:    3,
 		PingCount:  3,
 	}
@@ -24,7 +23,6 @@ func TestRunAllTests(t *testing.T) {
 		Addr:       "8.8.8.8",
 		Output:     "plaintext",
 		ShowHelp:   false,
-		Concurrent: false,
 		Timeout:    3,
 		PingCount:  3,
 	}
@@ -33,7 +31,6 @@ func TestRunAllTests(t *testing.T) {
 		Addr:       "facebook.com",
 		Output:     "plaintext",
 		ShowHelp:   false,
-		Concurrent: false,
 		Timeout:    3,
 		PingCount:  3,
 	}
@@ -42,7 +39,6 @@ func TestRunAllTests(t *testing.T) {
 		Addr:       "https://meta.stackoverflow.com/",
 		Output:     "plaintext",
 		ShowHelp:   false,
-		Concurrent: false,
 		Timeout:    3,
 		PingCount:  3,
 	}
@@ -51,7 +47,6 @@ func TestRunAllTests(t *testing.T) {
 		Addr:       "facebook.com:80",
 		Output:     "plaintext",
 		ShowHelp:   false,
-		Concurrent: false,
 		Timeout:    3,
 		PingCount:  3,
 	}

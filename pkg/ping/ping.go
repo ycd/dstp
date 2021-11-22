@@ -9,21 +9,22 @@ import (
 	"os/exec"
 	"runtime"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/ycd/dstp/pkg/common"
 )
 
-func RunTest(ctx context.Context, addr common.Address, count int, timeout int) (common.Output, error) {
-	return runPing(ctx, addr, count, timeout)
+func RunTest(ctx context.Context, wg *sync.WaitGroup, addr common.Address, count int, timeout int, result *common.Result) error {
+	return runPing(ctx, wg, addr, count, timeout, result)
 }
 
-func runPing(ctx context.Context, addr common.Address, count int, timeout int) (common.Output, error) {
-	var output string
+func runPing(ctx context.Context, wg *sync.WaitGroup, addr common.Address, count int, timeout int, result *common.Result) error {
+	defer wg.Done()
 
 	pinger, err := createPinger(addr.String())
 	if err != nil {
-		return "", err
+		return err
 	}
 
 	pinger.Count = count
@@ -35,24 +36,32 @@ func runPing(ctx context.Context, addr common.Address, count int, timeout int) (
 	err = pinger.Run()
 	if err != nil {
 		if out, err := runPingFallback(ctx, addr, count, timeout); err == nil {
-			output += out.String()
+			result.Mu.Lock()
+			result.Ping = out.String()
+			result.Mu.Unlock()
 		} else {
-			return "", fmt.Errorf("failed to run ping: %v", err.Error())
+			return fmt.Errorf("failed to run ping: %v", err.Error())
 		}
 	} else {
 		stats := pinger.Statistics()
 		if stats.PacketsRecv == 0 {
 			if out, err := runPingFallback(ctx, addr, count, timeout); err == nil {
-				output += out.String()
+				result.Mu.Lock()
+				result.Ping = out.String()
+				result.Mu.Unlock()
 			} else {
-				output += "no response"
+				result.Mu.Lock()
+				result.Ping = "no response"
+				result.Mu.Unlock()
 			}
 		} else {
-			output += joinS(joinC(stats.AvgRtt.String()))
+			result.Mu.Lock()
+			result.Ping += joinS(joinC(stats.AvgRtt.String()))
+			result.Mu.Unlock()
 		}
 	}
 
-	return common.Output(output), nil
+	return nil
 }
 
 // runPingFallback executes the ping command from cli
