@@ -147,14 +147,13 @@ func parsePingOutput(out string) (pingOutput, error) {
 		switch {
 		case strings.Contains(line, "packets transmitted"):
 			arr := strings.Split(line, ",")
-			fmt.Println(arr)
 			if len(arr) < 3 {
 				continue
 			}
 
 			po.PacketTransmitted, po.PacketReceived, po.PacketLoss = arr[0], arr[1], arr[2]
 
-		case strings.Contains(line, "round-trip min/avg/max"):
+		case strings.Contains(line, "min/avg/max"):
 			l := strings.ReplaceAll(line, " = ", " ")
 			arr := strings.Split(l, " ")
 
