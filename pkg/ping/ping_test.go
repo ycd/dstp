@@ -1,4 +1,4 @@
-//go:build integration
+//go:build integration || darwin || fallback
 
 package ping
 
@@ -10,7 +10,7 @@ import (
 )
 
 func TestPingFallback(t *testing.T) {
-	out, err := runPingFallback(context.Background(), common.Address("8.8.8.8"), 3, 10)
+	out, err := runPingFallback(context.Background(), common.Address("8.8.8.8"), 3)
 	if err != nil {
 		t.Fatal(err.Error())
 	}

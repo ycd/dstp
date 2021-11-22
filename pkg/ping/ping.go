@@ -36,7 +36,7 @@ func runPing(ctx context.Context, wg *sync.WaitGroup, addr common.Address, count
 	}
 	err = pinger.Run()
 	if err != nil {
-		if out, err := runPingFallback(ctx, addr, count, timeout); err == nil {
+		if out, err := runPingFallback(ctx, addr, count); err == nil {
 			output = out.String()
 		} else {
 			return fmt.Errorf("failed to run ping: %v", err.Error())
@@ -44,7 +44,7 @@ func runPing(ctx context.Context, wg *sync.WaitGroup, addr common.Address, count
 	} else {
 		stats := pinger.Statistics()
 		if stats.PacketsRecv == 0 {
-			if out, err := runPingFallback(ctx, addr, count, timeout); err == nil {
+			if out, err := runPingFallback(ctx, addr, count); err == nil {
 				output = out.String()
 			} else {
 				output = "no response"
@@ -63,14 +63,13 @@ func runPing(ctx context.Context, wg *sync.WaitGroup, addr common.Address, count
 
 // runPingFallback executes the ping command from cli
 // Currently fallback is not implemented for windows.
-func runPingFallback(ctx context.Context, addr common.Address, count int, timeout int) (common.Output, error) {
-	args := fmt.Sprintf("-c %v -t %v", count, timeout)
+func runPingFallback(ctx context.Context, addr common.Address, count int) (common.Output, error) {
+	args := fmt.Sprintf("-c %v", count)
 	command := fmt.Sprintf("ping %s %s", args, addr.String())
 
-	out, err := executeCommand("bash", command)
-	if err != nil {
-		return common.Output(""), err
-	}
+	// This is not handled because the ping
+	// writes the output to stdout whether it fails or not
+	out, err := executeCommand(command)
 
 	po, err := parsePingOutput(out)
 	if err != nil {
@@ -80,7 +79,7 @@ func runPingFallback(ctx context.Context, addr common.Address, count int, timeou
 	return common.Output(po.AvgRTT + "ms"), nil
 }
 
-func executeCommand(shell, command string) (string, error) {
+func executeCommand(command string) (string, error) {
 	var errb bytes.Buffer
 	var out string
 
@@ -88,7 +87,7 @@ func executeCommand(shell, command string) (string, error) {
 	if runtime.GOOS == "windows" {
 		cmd = exec.Command("cmd", "/C", command)
 	} else {
-		cmd = exec.Command(shell, "-c", command)
+		cmd = exec.Command("/bin/bash", "-c", command)
 	}
 	cmd.Stderr = &errb
 	stdout, err := cmd.StdoutPipe()
@@ -106,7 +105,7 @@ func executeCommand(shell, command string) (string, error) {
 	}
 
 	if err := cmd.Wait(); err != nil {
-		return "", fmt.Errorf("got error: %v, stderr: %v", err, errb.String())
+		return out, fmt.Errorf("got error: %v, stderr: %v", err, errb.String())
 	}
 
 	return out, nil
@@ -147,14 +146,13 @@ func parsePingOutput(out string) (pingOutput, error) {
 		switch {
 		case strings.Contains(line, "packets transmitted"):
 			arr := strings.Split(line, ",")
-			fmt.Println(arr)
-			if len(arr) != 3 {
+			if len(arr) < 3 {
 				continue
 			}
 
 			po.PacketTransmitted, po.PacketReceived, po.PacketLoss = arr[0], arr[1], arr[2]
 
-		case strings.Contains(line, "round-trip min/avg/max"):
+		case strings.Contains(line, "min/avg/max"):
 			l := strings.ReplaceAll(line, " = ", " ")
 			arr := strings.Split(l, " ")
 
