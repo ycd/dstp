@@ -19,6 +19,7 @@ Options:
 	-o, --out    <string>  The type of the output, either json or plaintext    [Default: plaintext] 
 	-p           <int>     Number of ping packets                              [Default: 3]
 	-t           <int>     Give up on ping after this many seconds             [Default: 2s per ping packet]
+	-p           <string>  Port for testing TLS and HTTPS connectivity         [Default: 443]
 	-h, --help             Show this message and exit.
 ```
 
@@ -129,6 +130,7 @@ for 64-bit Windows, macOS, and Linux targets. They contain the compiled executab
    -o, --out    <string>  The type of the output, either json or plaintext    [Default: plaintext]
    -p           <int>     Number of ping packets                              [Default: 3]
    -t           <int>     Give up on ping after this many seconds             [Default: 2s per ping packet]
+   -p           <string>  Port for testing TLS and HTTPS connectivity         [Default: 443]
    -h, --help             Show this message and exit.
    ```
 
