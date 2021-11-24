@@ -3,11 +3,11 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"github.com/ycd/dstp/config"
 	"github.com/ycd/dstp/pkg/dstp"
 	"os"
 	"path/filepath"
-	"fmt"
 )
 
 func main() {

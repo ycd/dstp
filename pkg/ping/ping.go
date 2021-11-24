@@ -5,14 +5,13 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"github.com/ycd/dstp/pkg/common"
 	"log"
 	"os/exec"
 	"runtime"
 	"strings"
 	"sync"
 	"time"
-
-	"github.com/ycd/dstp/pkg/common"
 )
 
 func RunTest(ctx context.Context, wg *sync.WaitGroup, addr common.Address, count int, timeout int, result *common.Result) error {
@@ -29,11 +28,8 @@ func runPing(ctx context.Context, wg *sync.WaitGroup, addr common.Address, count
 	}
 
 	pinger.Count = count
-	if timeout == -1 {
-		pinger.Timeout = time.Duration(2*count) * time.Second
-	} else {
-		pinger.Timeout = time.Duration(timeout) * time.Second
-	}
+	pinger.Timeout = time.Duration(timeout) * time.Second
+
 	err = pinger.Run()
 	if err != nil {
 		if out, err := runPingFallback(ctx, addr, count); err == nil {

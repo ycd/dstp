@@ -5,6 +5,7 @@ import (
 	"crypto/tls"
 	"fmt"
 	"math"
+	"net"
 	"net/http"
 	"sync"
 	"time"
@@ -24,6 +25,10 @@ func RunAllTests(ctx context.Context, config config.Config) error {
 		return err
 	}
 
+	if config.Timeout == -1 {
+		config.Timeout = 2 * config.PingCount
+	}
+
 	var wg sync.WaitGroup
 	wg.Add(5)
 
@@ -33,9 +38,9 @@ func RunAllTests(ctx context.Context, config config.Config) error {
 
 	go lookup.Host(ctx, &wg, common.Address(addr), &result)
 
-	go testTLS(ctx, &wg, common.Address(addr), &result)
+	go testTLS(ctx, &wg, common.Address(addr), config.Timeout, config.Port, &result)
 
-	go testHTTPS(ctx, &wg, common.Address(addr), config.Timeout, &result)
+	go testHTTPS(ctx, &wg, common.Address(addr), config.Timeout, config.Port, &result)
 	wg.Wait()
 
 	s := result.Output(config.Output)
@@ -46,16 +51,29 @@ func RunAllTests(ctx context.Context, config config.Config) error {
 	return nil
 }
 
-func testTLS(ctx context.Context, wg *sync.WaitGroup, address common.Address, result *common.Result) error {
+func testTLS(ctx context.Context, wg *sync.WaitGroup, address common.Address, t int, port string, result *common.Result) error {
 	var output string
 	defer wg.Done()
 
-	conn, err := tls.Dial("tcp", fmt.Sprintf("%s:443", string(address)), nil)
+	p := "443"
+
+	if port != "" {
+		p = port
+	}
+
+	conn, err := tls.DialWithDialer(&net.Dialer{Timeout: time.Duration(t) * time.Second}, "tcp", fmt.Sprintf("%s:%s", string(address), p), nil)
 	if err != nil {
+		result.Mu.Lock()
+		result.TLS = err.Error()
+		result.Mu.Unlock()
 		return err
 	}
+
 	err = conn.VerifyHostname(string(address))
 	if err != nil {
+		result.Mu.Lock()
+		result.TLS = err.Error()
+		result.Mu.Unlock()
 		return err
 	}
 
@@ -75,11 +93,19 @@ func testTLS(ctx context.Context, wg *sync.WaitGroup, address common.Address, re
 	return nil
 }
 
-func testHTTPS(ctx context.Context, wg *sync.WaitGroup, address common.Address, t int, result *common.Result) error {
+func testHTTPS(ctx context.Context, wg *sync.WaitGroup, address common.Address, t int, port string, result *common.Result) error {
 	defer wg.Done()
 
-	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("https://%s", address), nil)
+	url := fmt.Sprintf("https://%s", address.String())
+	if port != "" {
+		url += fmt.Sprintf(":%s", port)
+	}
+
+	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
+		result.Mu.Lock()
+		result.HTTPS = err.Error()
+		result.Mu.Unlock()
 		return err
 	}
 
@@ -89,6 +115,9 @@ func testHTTPS(ctx context.Context, wg *sync.WaitGroup, address common.Address, 
 
 	resp, err := client.Do(req)
 	if err != nil {
+		result.Mu.Lock()
+		result.HTTPS = err.Error()
+		result.Mu.Unlock()
 		return err
 	}
 
