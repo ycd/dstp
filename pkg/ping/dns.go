@@ -17,11 +17,8 @@ func RunDNSTest(ctx context.Context, wg *sync.WaitGroup, addr common.Address, co
 	}
 
 	pinger.Count = count
-	if timeout == -1 {
-		pinger.Timeout = time.Duration(2*count) * time.Second
-	} else {
-		pinger.Timeout = time.Duration(timeout) * time.Second
-	}
+	pinger.Timeout = time.Duration(timeout) * time.Second
+
 	err = pinger.Run()
 	if err != nil {
 		return fmt.Errorf("failed to run ping: %v", err.Error())

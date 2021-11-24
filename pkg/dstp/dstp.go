@@ -25,6 +25,10 @@ func RunAllTests(ctx context.Context, config config.Config) error {
 		return err
 	}
 
+	if config.Timeout == -1 {
+		config.Timeout = 2 * config.PingCount
+	}
+
 	var wg sync.WaitGroup
 	wg.Add(5)
 
@@ -64,6 +68,7 @@ func testTLS(ctx context.Context, wg *sync.WaitGroup, address common.Address, t 
 		result.Mu.Unlock()
 		return err
 	}
+
 	err = conn.VerifyHostname(string(address))
 	if err != nil {
 		result.Mu.Lock()
