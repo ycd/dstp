@@ -15,12 +15,12 @@
 ```
 Usage: dstp [OPTIONS] [ARGS]
 Options:
-	-a, --addr   <string>  The URL or the IP address to run tests against      [REQUIRED]
-	-o, --out    <string>  The type of the output, either json or plaintext    [Default: plaintext] 
-	-p           <int>     Number of ping packets                              [Default: 3]
-	-t           <int>     Give up on ping after this many seconds             [Default: 2s per ping packet]
-    --port       <string>  Port for testing TLS and HTTPS connectivity         [Default: 443]
-	-h, --help             Show this message and exit.
+        -a, --addr   <string>  The URL or the IP address to run tests against      [REQUIRED]
+        -o, --out    <string>  The type of the output, either json or plaintext    [Default: plaintext] 
+        -p           <int>     Number of ping packets                              [Default: 3]
+        -t           <int>     Give up on ping after this many seconds             [Default: 2s per ping packet]
+        --port       <string>  Port for testing TLS and HTTPS connectivity         [Default: 443]
+        -h, --help             Show this message and exit.
 ```
 
 ## Motivation
@@ -126,12 +126,12 @@ for 64-bit Windows, macOS, and Linux targets. They contain the compiled executab
 
    Usage: dstp [OPTIONS] [ARGS]
    Options:
-   -a, --addr   <string>  The URL or the IP address to run tests against      [REQUIRED]
-   -o, --out    <string>  The type of the output, either json or plaintext    [Default: plaintext]
-   -p           <int>     Number of ping packets                              [Default: 3]
-   -t           <int>     Give up on ping after this many seconds             [Default: 2s per ping packet]
-   --port       <string>  Port for testing TLS and HTTPS connectivity         [Default: 443]
-   -h, --help             Show this message and exit.
+         -a, --addr   <string>  The URL or the IP address to run tests against      [REQUIRED]
+         -o, --out    <string>  The type of the output, either json or plaintext    [Default: plaintext]
+         -p           <int>     Number of ping packets                              [Default: 3]
+         -t           <int>     Give up on ping after this many seconds             [Default: 2s per ping packet]
+         --port       <string>  Port for testing TLS and HTTPS connectivity         [Default: 443]
+         -h, --help             Show this message and exit.
    ```
 
 ---
