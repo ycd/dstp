@@ -77,13 +77,13 @@ for 64-bit Windows, macOS, and Linux targets. They contain the compiled executab
 
 | platform     |
 | ----------- | 
-| [macOS ARM 64 Bit](https://github.com/ycd/dstp/releases/download/v0.3.1/dstp_0.3.1_darwin_arm64.tar.gz)
-| [macOS 64 Bit](https://github.com/ycd/dstp/releases/download/v0.3.1/dstp_0.3.1_darwin_x86_64.tar.gz)
-| [Linux 32-Bit](https://github.com/ycd/dstp/releases/download/v0.3.1/dstp_0.3.1_linux_i386.tar.gz)
-| [Linux ARM 64 Bit](https://github.com/ycd/dstp/releases/download/v0.3.1/dstp_0.3.1_linux_arm64.tar.gz)
-| [Linux 64 Bit](https://github.com/ycd/dstp/releases/download/v0.3.1/dstp_0.3.1_linux_x86_64.tar.gz)
-| [Windows 64 Bit](https://github.com/ycd/dstp/releases/download/v0.3.1/dstp_0.3.1_windows_x86_64.zip)
-| [Windows 32 Bit](https://github.com/ycd/dstp/releases/download/v0.3.1/dstp_0.3.1_windows_i386.zip)
+| [macOS ARM 64 Bit](https://github.com/ycd/dstp/releases/download/v0.4.0/dstp_0.4.0_darwin_arm64.tar.gz)
+| [macOS 64 Bit](https://github.com/ycd/dstp/releases/download/v0.4.0/dstp_0.4.0_darwin_x86_64.tar.gz)
+| [Linux 32-Bit](https://github.com/ycd/dstp/releases/download/v0.4.0/dstp_0.4.0_linux_i386.tar.gz)
+| [Linux ARM 64 Bit](https://github.com/ycd/dstp/releases/download/v0.4.0/dstp_0.4.0_linux_arm64.tar.gz)
+| [Linux 64 Bit](https://github.com/ycd/dstp/releases/download/v0.4.0/dstp_0.4.0_linux_x86_64.tar.gz)
+| [Windows 64 Bit](https://github.com/ycd/dstp/releases/download/v0.4.0/dstp_0.4.0_windows_x86_64.zip)
+| [Windows 32 Bit](https://github.com/ycd/dstp/releases/download/v0.4.0/dstp_0.4.0_windows_i386.zip)
 
 ### Installation from source
 
