@@ -43,7 +43,7 @@ brew install ycd/tap/dstp
 #### Go Install
 
 ```zsh
-go install github.com/ycd/dstp/cmd/dstp
+go install github.com/ycd/dstp/cmd/dstp@latest
 ```
 
 #### NixOS
