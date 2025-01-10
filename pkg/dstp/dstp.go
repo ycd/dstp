@@ -44,7 +44,6 @@ func RunAllTests(ctx context.Context, config config.Config) error {
 	wg.Wait()
 
 	s := result.Output(config.Output)
-	s += "\n"
 
 	printWithColor(s)
 

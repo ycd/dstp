@@ -2,12 +2,15 @@ package main
 
 import (
 	"context"
-	"flag"
+
+	flag "github.com/spf13/pflag"
+
 	"fmt"
-	"github.com/ycd/dstp/config"
-	"github.com/ycd/dstp/pkg/dstp"
 	"os"
 	"path/filepath"
+
+	"github.com/ycd/dstp/config"
+	"github.com/ycd/dstp/pkg/dstp"
 )
 
 func main() {

@@ -52,8 +52,24 @@ func (r Result) Output(outputType string) string {
 			output += fmt.Sprintf("%s: %v\n", White(v.Type().Field(i).Name), Green(v.Field(i).Interface()))
 		}
 	case "json":
-		// SAFETY: we are sure that this never fails
-		byt, _ := json.MarshalIndent(r, "", "  ")
+		v := map[string]string{}
+		if r.Ping.Content != "" {
+			v["ping"] = r.Ping.Content
+		}
+		if r.DNS.Content != "" {
+			v["dns"] = r.DNS.Content
+		}
+		if r.SystemDNS.Content != "" {
+			v["system_dns"] = r.SystemDNS.Content
+		}
+		if r.TLS.Content != "" {
+			v["tls"] = r.TLS.Content
+		}
+		if r.HTTPS.Content != "" {
+			v["https"] = r.HTTPS.Content
+		}
+
+		byt, _ := json.MarshalIndent(v, "", "  ")
 		output += string(byt)
 	}
 

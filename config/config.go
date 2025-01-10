@@ -1,7 +1,8 @@
 package config
 
 import (
-	"flag"
+	flag "github.com/spf13/pflag"
+
 	"fmt"
 	"os"
 
@@ -25,6 +26,7 @@ Options:
 	-p           <int>     Number of ping packets                              [Default: 3]
 	-t           <int>     Give up on ping after this many seconds             [Default: 2s per ping packet]
 	--port       <string>  Port for testing TLS and HTTPS connectivity         [Default: 443]
+	--dns        <string>  Custom DNS server to use for DNS resolution         [No default]
 	-h, --help             Show this message and exit.
 `
 
