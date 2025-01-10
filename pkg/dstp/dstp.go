@@ -36,7 +36,7 @@ func RunAllTests(ctx context.Context, config config.Config) error {
 
 	go ping.RunDNSTest(ctx, &wg, common.Address(addr), config.PingCount, config.Timeout, &result)
 
-	go lookup.Host(ctx, &wg, common.Address(addr), &result)
+	go lookup.Host(ctx, &wg, common.Address(addr), config.CustomDnsServer, &result)
 
 	go testTLS(ctx, &wg, common.Address(addr), config.Timeout, config.Port, &result)
 
