@@ -1,3 +1,5 @@
+version: 2
+
 env:
   - GO111MODULE=on
   - GOPROXY=https://goproxy.io
@@ -21,9 +23,7 @@ builds:
     main: cmd/dstp/dstp.go
 
 archives:
-  - replacements:
-      386: i386
-      amd64: x86_64
+  - name_template: "{{ .ProjectName }}_{{ .Version }}_{{- title .Os }}_{{ .Arch }}"
     format_overrides:
       - goos: windows
         format: zip
