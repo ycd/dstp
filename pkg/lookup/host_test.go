@@ -20,7 +20,12 @@ func TestLookup(t *testing.T) {
 	}
 	wg.Wait()
 
-	if result.DNS.Content == "" {
-		t.Fatal(err)
+	if result.DNS.Error != nil {
+		t.Fatal(result.DNS.Error)
 	}
+
+	if result.SystemDNS.Content == "" {
+		t.Fatal("System DNS resolution failed")
+	}
+
 }
