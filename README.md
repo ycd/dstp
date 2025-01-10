@@ -108,7 +108,7 @@ for 64-bit Windows, macOS, and Linux targets. They contain the compiled executab
    #### Unix/Linux
    ```
    # May require you to use sudo
-   $ go build cmd/dstp/main.go
+   $ go build cmd/dstp/dstp.go
    $ cp dstp /usr/local/bin/dstp
    ```
 

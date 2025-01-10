@@ -18,7 +18,7 @@ builds:
       - amd64
       - arm64
     dir: .
-    main: cmd/dstp/main.go
+    main: cmd/dstp/dstp.go
 
 archives:
   - replacements:
