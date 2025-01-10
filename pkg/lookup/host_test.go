@@ -4,9 +4,10 @@ package lookup
 
 import (
 	"context"
-	"github.com/ycd/dstp/pkg/common"
 	"sync"
 	"testing"
+
+	"github.com/ycd/dstp/pkg/common"
 )
 
 func TestLookup(t *testing.T) {
@@ -19,7 +20,7 @@ func TestLookup(t *testing.T) {
 	}
 	wg.Wait()
 
-	if result.SystemDNS == "" {
+	if result.DNS.Content == "" {
 		t.Fatal(err)
 	}
 }

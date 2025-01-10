@@ -5,13 +5,14 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/ycd/dstp/pkg/common"
 	"log"
 	"os/exec"
 	"runtime"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/ycd/dstp/pkg/common"
 )
 
 func RunTest(ctx context.Context, wg *sync.WaitGroup, addr common.Address, count int, timeout int, result *common.Result) error {
@@ -19,7 +20,7 @@ func RunTest(ctx context.Context, wg *sync.WaitGroup, addr common.Address, count
 }
 
 func runPing(ctx context.Context, wg *sync.WaitGroup, addr common.Address, count int, timeout int, result *common.Result) error {
-	var output string
+	var output common.ResultPart
 	defer wg.Done()
 
 	pinger, err := createPinger(addr.String())
@@ -33,25 +34,40 @@ func runPing(ctx context.Context, wg *sync.WaitGroup, addr common.Address, count
 	err = pinger.Run()
 	if err != nil {
 		if out, err := runPingFallback(ctx, addr, count); err == nil {
-			output = out.String()
+			output = common.ResultPart{
+				Content: out.String(),
+			}
 		} else {
-			return fmt.Errorf("failed to run ping: %v", err.Error())
+			err := fmt.Errorf("failed to run ping: %v", err.Error())
+			result.Mu.Lock()
+			result.Ping = common.ResultPart{
+				Error: err,
+			}
+			result.Mu.Unlock()
+			return err
 		}
 	} else {
 		stats := pinger.Statistics()
 		if stats.PacketsRecv == 0 {
 			if out, err := runPingFallback(ctx, addr, count); err == nil {
-				output = out.String()
+				output = common.ResultPart{
+					Content: out.String(),
+				}
 			} else {
-				output = "no response"
+				output = common.ResultPart{
+					Error: fmt.Errorf("no response"),
+				}
 			}
 		} else {
-			output = joinS(joinC(stats.AvgRtt.String()))
+			output = common.ResultPart{
+				Content: joinS(joinC(stats.AvgRtt.String())),
+			}
 		}
 	}
 
 	result.Mu.Lock()
 	result.Ping = output
+
 	result.Mu.Unlock()
 
 	return nil
@@ -59,7 +75,7 @@ func runPing(ctx context.Context, wg *sync.WaitGroup, addr common.Address, count
 
 // runPingFallback executes the ping command from cli
 // Currently fallback is not implemented for windows.
-func runPingFallback(ctx context.Context, addr common.Address, count int) (common.Output, error) {
+func runPingFallback(ctx context.Context, addr common.Address, count int) (common.ResultPart, error) {
 	args := fmt.Sprintf("-c %v", count)
 	command := fmt.Sprintf("ping %s %s", args, addr.String())
 
@@ -69,10 +85,12 @@ func runPingFallback(ctx context.Context, addr common.Address, count int) (commo
 
 	po, err := parsePingOutput(out)
 	if err != nil {
-		return common.Output(""), err
+		return common.ResultPart{Error: err}, err
 	}
 
-	return common.Output(po.AvgRTT + "ms"), nil
+	return common.ResultPart{
+		Content: po.AvgRTT + "ms",
+	}, nil
 }
 
 func executeCommand(command string) (string, error) {

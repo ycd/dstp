@@ -7,14 +7,21 @@ import (
 	"sync"
 )
 
-type Output string
-
 type Args []string
 
 type Address string
 
-func (o Output) String() string {
-	return string(o)
+type ResultPart struct {
+	Content string
+	Error   error
+}
+
+func (o ResultPart) String() string {
+	if o.Error != nil {
+		return Red(o.Error.Error())
+	}
+
+	return o.Content
 }
 
 func (a Address) String() string {
@@ -22,11 +29,11 @@ func (a Address) String() string {
 }
 
 type Result struct {
-	Ping      string `json:"ping"`
-	DNS       string `json:"dns"`
-	SystemDNS string `json:"system_dns"`
-	TLS       string `json:"tls"`
-	HTTPS     string `json:"https"`
+	Ping      ResultPart `json:"ping"`
+	DNS       ResultPart `json:"dns"`
+	SystemDNS ResultPart `json:"system_dns"`
+	TLS       ResultPart `json:"tls"`
+	HTTPS     ResultPart `json:"https"`
 
 	Mu sync.Mutex `json:"-"`
 }

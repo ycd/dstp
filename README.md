@@ -26,7 +26,7 @@ Options:
 ## Motivation
 
 A comment on [lobste.rs](https://lobste.rs/s/qtsklv/how_do_you_tell_if_problem_is_caused_by_dns#c_1nqkdp), in a thread
-about DNS gave a great idea and thought a robust tool like that come in handy!
+about DNS gave a great idea and thought a robust tool like that might come in handy!
 
 ## Installation
 
@@ -135,6 +135,16 @@ for 64-bit Windows, macOS, and Linux targets. They contain the compiled executab
    ```
 
 ---
+
+## Appendix
+
+The command `dstp` may collide with `docker stop`command if you are using the docker plugin with oh-my-zsh. 
+
+To fix this, you can add the following command at the end of your `.zshrc` file:
+
+```zsh
+unalias dstp
+```
 
 ## Contributing
 

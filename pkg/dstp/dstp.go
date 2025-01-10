@@ -64,7 +64,9 @@ func testTLS(ctx context.Context, wg *sync.WaitGroup, address common.Address, t 
 	conn, err := tls.DialWithDialer(&net.Dialer{Timeout: time.Duration(t) * time.Second}, "tcp", fmt.Sprintf("%s:%s", string(address), p), nil)
 	if err != nil {
 		result.Mu.Lock()
-		result.TLS = err.Error()
+		result.TLS = common.ResultPart{
+			Error: err,
+		}
 		result.Mu.Unlock()
 		return err
 	}
@@ -72,7 +74,9 @@ func testTLS(ctx context.Context, wg *sync.WaitGroup, address common.Address, t 
 	err = conn.VerifyHostname(string(address))
 	if err != nil {
 		result.Mu.Lock()
-		result.TLS = err.Error()
+		result.TLS = common.ResultPart{
+			Error: err,
+		}
 		result.Mu.Unlock()
 		return err
 	}
@@ -87,7 +91,9 @@ func testTLS(ctx context.Context, wg *sync.WaitGroup, address common.Address, t 
 	}
 
 	result.Mu.Lock()
-	result.TLS = output
+	result.TLS = common.ResultPart{
+		Content: output,
+	}
 	result.Mu.Unlock()
 
 	return nil
@@ -104,7 +110,9 @@ func testHTTPS(ctx context.Context, wg *sync.WaitGroup, address common.Address, 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		result.Mu.Lock()
-		result.HTTPS = err.Error()
+		result.HTTPS = common.ResultPart{
+			Error: err,
+		}
 		result.Mu.Unlock()
 		return err
 	}
@@ -116,13 +124,17 @@ func testHTTPS(ctx context.Context, wg *sync.WaitGroup, address common.Address, 
 	resp, err := client.Do(req)
 	if err != nil {
 		result.Mu.Lock()
-		result.HTTPS = err.Error()
+		result.HTTPS = common.ResultPart{
+			Error: err,
+		}
 		result.Mu.Unlock()
 		return err
 	}
 
 	result.Mu.Lock()
-	result.HTTPS = fmt.Sprintf("got %s", resp.Status)
+	result.HTTPS = common.ResultPart{
+		Content: fmt.Sprintf("got %s", resp.Status),
+	}
 	result.Mu.Unlock()
 
 	return nil
