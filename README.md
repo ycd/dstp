@@ -47,20 +47,29 @@ brew install ycd/tap/dstp
 go install github.com/ycd/dstp/cmd/dstp@latest
 ```
 
-#### NixOS
+#### NixOS/nix
 
-1. Add `dstp`to `/etc/nixos/configuration.nix`:
+You can install dstp using one of these methods:
 
+1. Using `nix-shell` or `nix shell` (recommended for trying it out):
+```bash
+nix shell nixpkgs#dstp
 ```
-environment.systemPackages = with pkgs; [
-  dstp
-];
+
+2. Adding to your NixOS configuration (system-wide installation):
+```nix
+# configuration.nix or home-manager configuration
+{
+  # ...
+  environment.systemPackages = with pkgs; [
+    dstp
+  ];
+}
 ```
 
-2. Run:
-
-```zsh
-sudo nixos-rebuild switch
+3. Or using `nix profile` (for individual user installation):
+```bash
+nix profile install nixpkgs#dstp
 ```
 
 #### Arch Linux
