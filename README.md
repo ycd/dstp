@@ -35,10 +35,8 @@ about DNS gave a great idea and thought a robust tool like that might come in ha
 
 #### Homebrew
 
-For Homebrew on macOS, install the [`ycd/tap/dstp`](https://github.com/ycd/homebrew-tap#readme) formula.
-
 ```zsh
-brew install ycd/tap/dstp
+brew install dstp
 ```
 
 #### Go Install
